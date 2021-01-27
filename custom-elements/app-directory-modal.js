@@ -29,7 +29,9 @@ class AppDirectoryModal extends HTMLElement {
       }
 
       function touchCloseModal(e) {
-        selectAndCloseModal();
+        if (e.touches.length >= 2 ) {
+          selectAndCloseModal(e);
+        }
       }
 
       row.classList.add('directory-row');
