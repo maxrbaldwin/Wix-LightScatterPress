@@ -3,10 +3,15 @@ import cards, { defaultCard } from 'public/cards';
 class AppCarousel extends HTMLElement {
   constructor() {
     super();
+    this.root = document.createElement('div');
   }
 
   static get observedAttributes() {
-    return ['card', 'viewport'];
+    return ['card', 'deck', 'viewport'];
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    this.render();
   }
 
   getCardAttribute() {
@@ -14,59 +19,27 @@ class AppCarousel extends HTMLElement {
   }
 
   connectedCallback() {
-    const cardParameter = this.getCardAttribute();
-    const viewport = this.getAttribute('viewport') || 'mobile';
-
-    if (viewport === 'mobile') {
-
-    }
-    // base
-    const wrapper = this.createWrapper();
-    wrapper.appendChild(this.createContainer(cardParameter))
-    // wrapper.appendChild(createNavigation());
-
+    this.root.id = "carousel-wrapper";
+    this.appendChild(this.root);
     this.appendChild(this.createStyle());
-    this.appendChild(wrapper);
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    console.log('change: ', name, oldValue, newValue);
-  }
-
-  createWrapper () {
-      const wrapper = document.createElement('div')
-      wrapper.id = 'carousel-wrapper';
-      return wrapper;
-  }
-
-  createContainer(cardParameter) {
-      const container = document.createElement('div');
-      container.id = 'carousel-container';
-
-      const cardsInOrder = {
-        ...(cardParameter && { [cardParameter]: cards[cardParameter] }), 
-        ...cards
-      };
-
-      Object.keys(cardsInOrder).forEach((key, i) => {
-        const card = cards[key];
-        const cardHtml = this.createCard(card, i);
-
-        container.appendChild(cardHtml);  
-      })
-
-      return container;
+    this.render();
   }
 
   createCard(card, i) {
       const cardContainer = document.createElement('div');
       const cardTitle = document.createElement('h2');
-      const root = this;
+      const self = this;
       // To be in the same scope as the root for dispatch purposes.
       // The click event "this" is the card. Not the custom element.
-      function openModal(e) {
-        const cardParameter = root.getCardAttribute();
-        root.dispatchEvent(new CustomEvent('open-modal', { detail: { card: cardParameter }}));
+      function openModal() {
+        const cardParameter = self.getCardAttribute();
+        self.dispatchEvent(new CustomEvent('open-card-modal'));
+      }
+
+      function touchOpenModal(e) {
+        if (e.touches.length >= 2 ) {
+          openModal();
+        }
       }
     
       if (i === 0) {
@@ -75,13 +48,14 @@ class AppCarousel extends HTMLElement {
           cardContainer.appendChild(cardText);
           cardContainer.classList.add('first');
           cardContainer.addEventListener('click', openModal);
-          cardContainer.addEventListener('touchstart', openModal);
+          cardContainer.addEventListener('touchstart', touchOpenModal);
         } else {
           cardContainer.classList.add('sub-card');
         }
 
       // cardTitle.innerHTML = card.title;
       // cardContainer.appendChild(cardTitle);
+      cardContainer.style.backgroundColor = card.backColor;
       cardContainer.classList.add('card');
       
       return cardContainer;
@@ -98,18 +72,19 @@ class AppCarousel extends HTMLElement {
             width: 100%;
             justify-content: center;
         }
+        #carousel-wrapper {
+          width: 100%;
+        }
         .card {
-          padding: 10px;
+          padding: 10px 10px 0px 10px;
           border: 1px solid #000;
         }
         .card.first {
-          background-color: #ff0000;
           min-height: 350px;
           border-radius: 3px;
         }
         .card.sub-card {
-          background-color: #0000ff;
-          min-height: 10px;
+          min-height: 5px;
           border-bottom-left-radius: 3px;
           border-bottom-right-radius: 3px;
           border-top: 0px;
@@ -136,7 +111,16 @@ class AppCarousel extends HTMLElement {
 };
 
   render() {
-    console.log('render: ', this.card);
+    const currentCard = this.getCardAttribute();
+    const deck = JSON.parse(this.getAttribute('deck')) || new cards(currentCard);
+    const viewport = this.getAttribute('viewport') || 'mobile';
+
+    this.root.innerHTML = `<div id="carousel-container"></div>`;
+
+    const container = this.root.querySelector('#carousel-container');
+    deck.data.forEach((card, i) => {
+      container.append(this.createCard(card, i))
+    });
   }
 }
 
