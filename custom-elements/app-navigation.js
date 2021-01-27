@@ -39,6 +39,7 @@ class AppNavigation extends HTMLElement {
       }
 
       button.addEventListener('click', buttonClick);
+      button.addEventListener('touchstart', buttonClick);
       
       return button;
     }
