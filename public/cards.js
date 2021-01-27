@@ -118,10 +118,12 @@ function makeDeck(firstCard) {
 class cards {
   constructor(firstCard) {
     this.data = makeDeck(firstCard);
-    this.currentCard = firstCard;
+    this.currentCard = firstCard.toString();
   }
   selectCard(card) {
     const clone = this.data;
+    const cardIndex = clone.findIndex(item => item.id === card.id);
+    clone.splice(cardIndex, 1);
     clone.unshift(card);
     this.data = clone;
     this.currentCard = card.id;
