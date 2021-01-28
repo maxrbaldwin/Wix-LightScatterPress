@@ -13,16 +13,24 @@ const appNavigationSelector = '#AppNavigation';
 
 const pageCommands = {
     openCardModal: function(context) {
-        wixWindow.openLightbox('CardModal', context);
+        wixWindow.openLightbox('CardModal', context)
+            .catch(err => {
+                console.log('Catch in open card modal: ', err);
+            });
     },
     openDirectoryModal: function(deck) {
         wixWindow.openLightbox('DirectoryModal')
 			.then(card => {
-				deck.selectCard(card);
-				$w(appCarouselSelector).setAttribute('deck', JSON.stringify(deck));
-        		$w(appCarouselSelector).setAttribute('card', deck.currentCard);
+                if (card) {
+                    deck.selectCard(card);
+				    $w(appCarouselSelector).setAttribute('deck', JSON.stringify(deck));
+        		    $w(appCarouselSelector).setAttribute('card', deck.currentCard);
+                }
 				wixWindow.scrollTo(0, 0);
-			});
+			})
+            .catch(err => {
+                console.log('Catch in open directory modal: ', err);
+            });
     },
     nextCard: function (deck) {
         return deck.nextCard();
@@ -36,10 +44,6 @@ $w.onReady(function () {
     const queryParamCard = (wixLocation.query && wixLocation.query.card) || defaultCard;
     const deck = new cards(queryParamCard);
 	const viewport = wixWindow.formFactor.toLocaleLowerCase();
-	
-	$w(appCarouselSelector).setAttribute('deck', JSON.stringify(deck));
-    $w(appCarouselSelector).setAttribute('card', deck.currentCard);
-    $w(appCarouselSelector).setAttribute('viewport', viewport);
 
     // open card modal from carousel
     $w(appCarouselSelector).on('open-card-modal', function(e) {
@@ -59,12 +63,16 @@ $w.onReady(function () {
         const nextCard = pageCommands.nextCard(deck);
         $w(appCarouselSelector).setAttribute('deck', JSON.stringify(deck));
         $w(appCarouselSelector).setAttribute('card', deck.currentCard);
-    })
+    });
 
 	// navigate to previous card
     $w(appNavigationSelector).on('previous-card', function(e) {
         const previousCard = pageCommands.previousCard(deck);
         $w(appCarouselSelector).setAttribute('deck', JSON.stringify(deck));
         $w(appCarouselSelector).setAttribute('card', deck.currentCard);
-    })
+    });
+
+	$w(appCarouselSelector).setAttribute('deck', JSON.stringify(deck));
+    $w(appCarouselSelector).setAttribute('card', deck.currentCard);
+    $w(appCarouselSelector).setAttribute('viewport', viewport);
 });
