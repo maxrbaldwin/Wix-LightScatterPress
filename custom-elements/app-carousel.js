@@ -1,4 +1,4 @@
-import cards, { defaultCard } from 'public/cards';
+import cards, { data as cardData, defaultCard } from 'public/cards';
 
 class AppCarousel extends HTMLElement {
   constructor() {
@@ -47,13 +47,15 @@ class AppCarousel extends HTMLElement {
           cardText.innerHTML = card.desc;
           cardContainer.appendChild(cardText);
           cardContainer.classList.add('first');
+          cardContainer.style.backgroundColor = '#fff';
           cardContainer.addEventListener('click', openModal, false);
           cardContainer.addEventListener('touchstart', touchOpenModal, false);
         } else {
           cardContainer.classList.add('sub-card');
+          cardContainer.style.backgroundImage = `url(${card.backColor})`;
         }
-      
-      cardContainer.style.backgroundColor = card.backColor;
+      cardContainer.style.top = `${20 * i}px`;
+      cardContainer.style.zIndex = `${cardData.length - i}`;
       cardContainer.classList.add('card');
       
       return cardContainer;
@@ -73,37 +75,27 @@ class AppCarousel extends HTMLElement {
         #carousel-wrapper {
           width: 100%;
         }
+        #carousel-container {
+          position: relative;
+        }
         .card {
           padding: 10px 10px 0px 10px;
           border: 1px solid #000;
-        }
-        .card.first {
           min-height: 350px;
-          border-radius: 3px;
+          position: absolute;
+          border-radius: 8px;
+          left: 0;
+          right: 0;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
         }
-        .card.sub-card {
-          min-height: 5px;
-          border-bottom-left-radius: 3px;
-          border-bottom-right-radius: 3px;
-          border-top: 0px;
-        }
-        #alt-navigation {
-          display: flex;
-          flex-direction: row;
-          border: 1px solid #000;
-        }
-        .nav-item {
-          flex-grow: 1;
-          text-align: center;
-          min-height: 50px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        #middleNavItem {
-          border-left: 1px solid #000;
-          border-right: 1px solid #000;
-        }
+        // .sub-card {
+        //   background-image: url("https://res.cloudinary.com/maxrbaldwin-com/image/upload/v1611865301/Wix-LightScatterPress/cardback.png");
+        //   background-position: center;
+        //   background-repeat: no-repeat;
+        //   background-size: 100% 100%;
+        // }
       `;
     return styleElement;
 };
