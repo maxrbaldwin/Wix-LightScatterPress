@@ -13,33 +13,24 @@ class AppNavigation extends HTMLElement {
     this.render();
   }
 
-  createWrapper () {
-    const wrapper = document.createElement('div')
-    wrapper.id = 'navigation-wrapper';
-    return wrapper;
-  }
-
   createContainer() {
     const container = document.createElement('div');
     container.id = 'navigation-container';
     const self = this;
 
     function createButton(text, id, clickEvent) {
-      const button = document.createElement('div')
-      const buttonText = document.createElement('p');
+      const button = document.createElement('button')
       
-      buttonText.innerText = text;
-      button.appendChild(buttonText);
+      button.innerText = text;
       button.classList.add('nav-item');
       button.id = id;
 
       function buttonClick(e) {
-        e.preventDefault();
         self.dispatchEvent(new CustomEvent(clickEvent));
       }
 
-      button.addEventListener('click', buttonClick);
-      button.addEventListener('touchstart', buttonClick);
+      button.addEventListener('click', buttonClick, false);
+      button.addEventListener('touchstart', buttonClick, false);
       
       return button;
     }
