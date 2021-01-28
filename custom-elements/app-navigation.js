@@ -27,6 +27,7 @@ class AppNavigation extends HTMLElement {
 
       function buttonClick(e) {
         self.dispatchEvent(new CustomEvent(clickEvent));
+        e.preventDefault();
       }
 
       button.addEventListener('click', buttonClick, false);
@@ -50,7 +51,7 @@ class AppNavigation extends HTMLElement {
     const styleElement = document.createElement('style');
     styleElement.innerHTML = `
         app-navigation {
-            background-color: #ff0000;
+            background-color: #E9E9E9;
             display: flex;
             width: 100% !important;
             justify-content: center;
@@ -58,6 +59,7 @@ class AppNavigation extends HTMLElement {
             bottom: 0;
             right: 0;
             left: 0;
+            z-index: 100;
         }
         #navigation-wrapper {
           width: 100%;

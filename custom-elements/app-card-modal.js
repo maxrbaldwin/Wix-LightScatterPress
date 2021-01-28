@@ -15,7 +15,7 @@ class AppCardModal extends HTMLElement {
     const styleElement = document.createElement('style');
     styleElement.innerHTML = `
         app-card-modal {
-            background-color: #0000ff;
+            background-color: #E9E9E9;
             display: flex;
             height: 100%;
             height: -moz-available;
@@ -25,6 +25,7 @@ class AppCardModal extends HTMLElement {
         }
         #card-modal-wrapper {
           width: 100%;
+          padding: 20px;
         }
       `;
     return styleElement;
