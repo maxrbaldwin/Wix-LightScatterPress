@@ -19,8 +19,6 @@ class AppDirectoryModal extends HTMLElement {
       const title = document.createElement('p');
       
       function selectAndCloseModal(e) {
-        e.preventDefault();
-
         self.dispatchEvent(new CustomEvent('close-directory-modal', {
           detail: {
             card: card,
@@ -46,7 +44,7 @@ class AppDirectoryModal extends HTMLElement {
     const styleElement = document.createElement('style');
     styleElement.innerHTML = `
         app-directory-modal {
-            background-color: #ff0000;
+            background-color: #E9E9E9;
             display: flex;
             height: 100%;
             height: -moz-available;
@@ -56,6 +54,7 @@ class AppDirectoryModal extends HTMLElement {
         }
         #directory-modal-wrapper {
           width: 100%;
+          padding: 20px;
         }
         .directory-row {
           width: 100%;
