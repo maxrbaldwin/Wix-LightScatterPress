@@ -47,14 +47,12 @@ class AppCarousel extends HTMLElement {
           cardText.innerHTML = card.desc;
           cardContainer.appendChild(cardText);
           cardContainer.classList.add('first');
-          cardContainer.addEventListener('click', openModal);
-          cardContainer.addEventListener('touchstart', touchOpenModal);
+          cardContainer.addEventListener('click', openModal, false);
+          cardContainer.addEventListener('touchstart', touchOpenModal, false);
         } else {
           cardContainer.classList.add('sub-card');
         }
-
-      // cardTitle.innerHTML = card.title;
-      // cardContainer.appendChild(cardTitle);
+      
       cardContainer.style.backgroundColor = card.backColor;
       cardContainer.classList.add('card');
       
