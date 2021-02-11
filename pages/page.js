@@ -23,8 +23,7 @@ const pageCommands = {
 			.then(card => {
                 if (card) {
                     deck.selectCard(card);
-				    $w(appCarouselSelector).setAttribute('deck', JSON.stringify(deck));
-        		    $w(appCarouselSelector).setAttribute('card', deck.currentCard);
+        		    $w(appCarouselSelector).setAttribute('card', JSON.stringify(card));
                 }
 				wixWindow.scrollTo(0, 0);
 			})
@@ -48,7 +47,7 @@ $w.onReady(function () {
     // open card modal from carousel
     $w(appCarouselSelector).on('open-card-modal', function(e) {
         const modalContext = {
-            card: deck.getCurrentCardData(),
+            card: e.detail.card,
         };
         pageCommands.openCardModal(modalContext);
     });
@@ -73,6 +72,6 @@ $w.onReady(function () {
     });
 
 	$w(appCarouselSelector).setAttribute('deck', JSON.stringify(deck));
-    $w(appCarouselSelector).setAttribute('card', deck.currentCard);
+    // $w(appCarouselSelector).setAttribute('card', deck.currentCard);
     $w(appCarouselSelector).setAttribute('viewport', viewport);
 });

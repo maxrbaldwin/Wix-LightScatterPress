@@ -36,13 +36,9 @@ class AppNavigation extends HTMLElement {
       return button;
     }
 
-    const leftButton = createButton('Previous', 'leftNavItem', 'previous-card');
-    const centerButton = createButton('Next', 'middleNavItem', 'next-card');
-    const rightButton = createButton('Open', 'rightNavItem', 'open-directory-modal');
+    const centerButton = createButton('Open', 'middleNavItem', 'open-directory-modal');
 
-    container.appendChild(leftButton);
     container.appendChild(centerButton);
-    container.appendChild(rightButton);
 
     return container;
   }
@@ -78,8 +74,6 @@ class AppNavigation extends HTMLElement {
           justify-content: center;
           align-items: center;
           height: 100%;
-          height: -moz-available;
-          height: -webkit-fill-available;
         }
         #middleNavItem {
           border-left: 1px solid #000;
