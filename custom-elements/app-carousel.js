@@ -67,9 +67,14 @@ class AppCarousel extends HTMLElement {
     const self = this;
 
     const cardText = document.createElement('p');
-    cardText.innerHTML = card.desc;
-    cardFront.appendChild(cardText);
     cardFront.classList.add('card-front');
+    
+    if (card.front) {
+      cardFront.style.backgroundImage = `url(${card.front})`;
+    } else {
+      cardText.innerHTML = card.desc;
+      cardFront.appendChild(cardText);
+    }
 
     cardBack.style.backgroundImage = `url(${card.backColor})`;
     cardBack.classList.add('card-back');
