@@ -11,6 +11,17 @@ class AppCardModal extends HTMLElement {
     this.render();
   }
 
+  createAudio(card) {
+    const audio = document.createElement('audio');
+    const source = document.createElement('source');
+    audio.autoplay = true;
+    audio.controls = true;
+    source.src = card.audio;
+    source.type = 'audio/wav';
+    audio.appendChild(source);
+    return audio;
+  }
+
   createStyle() {
     const styleElement = document.createElement('style');
     styleElement.innerHTML = `
@@ -42,6 +53,10 @@ class AppCardModal extends HTMLElement {
         <p>${currentCard.desc}</p>
       </div>
     `
+    if (currentCard.audio) {
+      const audio = this.createAudio(currentCard);
+      this.root.appendChild(audio);
+    }
   }
 }
 customElements.define('app-card-modal', AppCardModal);
