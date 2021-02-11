@@ -59,7 +59,6 @@ class AppCardModal extends HTMLElement {
         <p>${currentCard.desc}</p>
       </div>
     `
-    console.log('cc: ', currentCard)
     if (currentCard.front) {
       this.root.appendChild(this.createCardImage(currentCard));
     }
