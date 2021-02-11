@@ -22,6 +22,12 @@ class AppCardModal extends HTMLElement {
     return audio;
   }
 
+  createCardImage(card) {
+    const image = document.createElement('img');
+    image.src = card.front;
+    return image;
+  }
+
   createStyle() {
     const styleElement = document.createElement('style');
     styleElement.innerHTML = `
@@ -53,6 +59,11 @@ class AppCardModal extends HTMLElement {
         <p>${currentCard.desc}</p>
       </div>
     `
+    console.log('cc: ', currentCard)
+    if (currentCard.front) {
+      this.root.appendChild(this.createCardImage(currentCard));
+    }
+
     if (currentCard.audio) {
       const audio = this.createAudio(currentCard);
       this.root.appendChild(audio);
