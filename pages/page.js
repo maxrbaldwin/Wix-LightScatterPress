@@ -25,7 +25,7 @@ const pageCommands = {
                     deck.selectCard(card);
         		    $w(appCarouselSelector).setAttribute('card', JSON.stringify(card));
                 }
-				wixWindow.scrollTo(0, 0);
+				$w(appCarouselSelector).scrollTo();
 			})
             .catch(err => {
                 console.log('Catch in open directory modal: ', err);
@@ -43,6 +43,8 @@ $w.onReady(function () {
     const queryParamCard = (wixLocation.query && wixLocation.query.card) || defaultCard;
     const deck = new cards(queryParamCard);
 	const viewport = wixWindow.formFactor.toLocaleLowerCase();
+
+    $w('#quickActionBar1').collapse()
 
     // open card modal from carousel
     $w(appCarouselSelector).on('open-card-modal', function(e) {

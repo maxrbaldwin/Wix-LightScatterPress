@@ -37,7 +37,8 @@ export const data = [
     title: 'card 5',
     desc: "Here is card five",
     image: '',
-    backColor: 'https://res.cloudinary.com/maxrbaldwin-com/image/upload/v1612988042/Wix-LightScatterPress/gaia.jpg',
+    backColor: 'https://res.cloudinary.com/maxrbaldwin-com/image/upload/v1613072069/Wix-LightScatterPress/back-of-card-draft.jpg',
+    front: 'https://res.cloudinary.com/maxrbaldwin-com/image/upload/v1612988042/Wix-LightScatterPress/gaia.jpg',
     audio: 'https://res.cloudinary.com/maxrbaldwin-com/video/upload/v1612988055/Wix-LightScatterPress/Gaia_2.wav',
   },
   {
