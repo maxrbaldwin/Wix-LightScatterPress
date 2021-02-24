@@ -18,10 +18,14 @@ class AppNavigation extends HTMLElement {
     container.id = 'navigation-container';
     const self = this;
 
-    function createButton(text, id, clickEvent) {
+    function createButton(iconKey, id, clickEvent) {
       const button = document.createElement('button')
+      const icons = {
+        open: '<img src="https://res.cloudinary.com/maxrbaldwin-com/image/upload/v1613593895/Wix-LightScatterPress/fan.png" class="nav-icon" />',
+        shuffle: '<img src="https://res.cloudinary.com/maxrbaldwin-com/image/upload/v1613593895/Wix-LightScatterPress/shuffle.png" class="nav-icon" />',
+      };
       
-      button.innerText = text;
+      button.innerHTML = icons[iconKey];
       button.classList.add('nav-item');
       button.id = id;
 
@@ -36,9 +40,11 @@ class AppNavigation extends HTMLElement {
       return button;
     }
 
-    const centerButton = createButton('Open', 'middleNavItem', 'open-directory-modal');
+    const openButton = createButton('open', 'openNavItem', 'open-directory-modal');
+    const shuffleButton = createButton('shuffle', 'shuffle', 'shuffle');
 
-    container.appendChild(centerButton);
+    container.appendChild(openButton);
+    container.appendChild(shuffleButton);
 
     return container;
   }
@@ -47,24 +53,28 @@ class AppNavigation extends HTMLElement {
     const styleElement = document.createElement('style');
     styleElement.innerHTML = `
         app-navigation {
-            background-color: #E9E9E9;
-            display: flex;
-            width: 100% !important;
-            justify-content: center;
-            position: fixed;
-            bottom: 0;
-            right: 0;
-            left: 0;
-            z-index: 100;
+          display: flex;
+          width: 100% !important;
+          justify-content: center;
+          position: fixed;
+          bottom: 0;
+          right: 0;
+          left: 0;
+          z-index: 100;
         }
         #navigation-wrapper {
           width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
         #navigation-container {
+          background-color: #899FAE;
           display: flex;
           flex-direction: row;
-          border: 1px solid #000;
+          border-top: 1px solid #899FAE;
           height: 100%;
+          width: 100%;
         }
         .nav-item {
           flex-grow: 1;
@@ -75,9 +85,12 @@ class AppNavigation extends HTMLElement {
           align-items: center;
           height: 100%;
         }
-        #middleNavItem {
-          border-left: 1px solid #000;
-          border-right: 1px solid #000;
+        .nav-icon {
+          width: 40px;
+          height: 40px;
+        }
+        #openNavItem {
+          border-right: 1px solid #899FAE;
         }
       `;
     return styleElement;
