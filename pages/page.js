@@ -25,7 +25,7 @@ const pageCommands = {
                     deck.selectCard(card);
         		    $w(appCarouselSelector).setAttribute('card', JSON.stringify(card));
                 }
-				$w(appCarouselSelector).scrollTo();
+				wixWindow.scrollTo(0, 0);
 			})
             .catch(err => {
                 console.log('Catch in open directory modal: ', err);
@@ -44,8 +44,6 @@ $w.onReady(function () {
     const deck = new cards(queryParamCard);
 	const viewport = wixWindow.formFactor.toLocaleLowerCase();
 
-    $w('#quickActionBar1').collapse()
-
     // open card modal from carousel
     $w(appCarouselSelector).on('open-card-modal', function(e) {
         const modalContext = {
@@ -57,20 +55,6 @@ $w.onReady(function () {
 	// open directory modal from navigation
     $w(appNavigationSelector).on('open-directory-modal', function(e) {
         pageCommands.openDirectoryModal(deck);
-    });
-
-	// navigate to next card
-    $w(appNavigationSelector).on('next-card', function(e) {
-        const nextCard = pageCommands.nextCard(deck);
-        $w(appCarouselSelector).setAttribute('deck', JSON.stringify(deck));
-        $w(appCarouselSelector).setAttribute('card', deck.currentCard);
-    });
-
-	// navigate to previous card
-    $w(appNavigationSelector).on('previous-card', function(e) {
-        const previousCard = pageCommands.previousCard(deck);
-        $w(appCarouselSelector).setAttribute('deck', JSON.stringify(deck));
-        $w(appCarouselSelector).setAttribute('card', deck.currentCard);
     });
 
 	$w(appCarouselSelector).setAttribute('deck', JSON.stringify(deck));
