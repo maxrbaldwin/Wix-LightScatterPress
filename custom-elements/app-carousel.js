@@ -11,7 +11,6 @@ class AppCarousel extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log('new: ', name, newValue, oldValue)
     if (name === 'card') {
       this.forceFirstCard(JSON.parse(newValue));
     }
@@ -63,18 +62,10 @@ class AppCarousel extends HTMLElement {
     const cardInner = document.createElement('div');
     const cardFront = document.createElement('div');
     const cardBack = document.createElement('div');
-    const cardTitle = document.createElement('h2');
-    const self = this;
 
-    const cardText = document.createElement('p');
     cardFront.classList.add('card-front');
     
-    if (card.front) {
-      cardFront.style.backgroundImage = `url(${card.front})`;
-    } else {
-      cardText.innerHTML = card.desc;
-      cardFront.appendChild(cardText);
-    }
+    cardFront.style.backgroundImage = `url(${card.front})`;
 
     cardBack.style.backgroundImage = `url(${card.backColor})`;
     cardBack.classList.add('card-back');
@@ -120,7 +111,7 @@ class AppCarousel extends HTMLElement {
       }
 
       function release(pullX) {
-        const threshold = 50;
+        const threshold = 20;
 
         if (pullX >= threshold) {
           const animationTimer = setTimeout(() => {
@@ -209,8 +200,12 @@ class AppCarousel extends HTMLElement {
           height: -webkit-fill-available;
           width: 100%;
           justify-content: center;
+          margin-left: auto;
+          margin-right: auto;
         }
         #carousel-wrapper {
+          max-width: 300px;
+          max-height: 350px;
           width: 100%;
           height: 100%;
         }
@@ -224,6 +219,11 @@ class AppCarousel extends HTMLElement {
           position: absolute;
           left: 0;
           right: 0;
+        }
+        .card-front {
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
         }
         #first {
           z-index: 20 !important;
