@@ -13,6 +13,10 @@ class AppNavigation extends HTMLElement {
     this.render();
   }
 
+  getCardAttribute() {
+    return JSON.parse(this.getAttribute('card'));
+  }
+
   createContainer() {
     const container = document.createElement('div');
     container.id = 'navigation-container';
@@ -21,15 +25,17 @@ class AppNavigation extends HTMLElement {
     function createButton(iconKey, id, clickEvent) {
       const button = document.createElement('button')
       const icons = {
-        open: '<img src="https://res.cloudinary.com/maxrbaldwin-com/image/upload/v1613593895/Wix-LightScatterPress/fan.png" class="nav-icon" />',
-        shuffle: '<img src="https://res.cloudinary.com/maxrbaldwin-com/image/upload/v1613593895/Wix-LightScatterPress/shuffle.png" class="nav-icon" />',
+        open: '<img src="https://static.wixstatic.com/media/bb0dab_469058bc9aef4cedadbd0f7bc54f0fb0~mv2.png" class="nav-icon" />',
+        shuffle: '<img src="https://static.wixstatic.com/media/bb0dab_6e59c95cda0a41a1b2f80e111e53eb99~mv2.png" class="nav-icon" />',
+        bookmark: `<div id="bookmark">${self.getCardAttribute().pageNumber}</div>`,
       };
-      
+
       button.innerHTML = icons[iconKey];
       button.classList.add('nav-item');
       button.id = id;
 
       function buttonClick(e) {
+        console.log('click: ', e);
         self.dispatchEvent(new CustomEvent(clickEvent));
         e.preventDefault();
       }
@@ -41,9 +47,11 @@ class AppNavigation extends HTMLElement {
     }
 
     const openButton = createButton('open', 'openNavItem', 'open-directory-modal');
+    const bookmarkButton = createButton('bookmark', 'bookmarkNav', 'bookmark');
     const shuffleButton = createButton('shuffle', 'shuffle', 'shuffle');
 
     container.appendChild(openButton);
+    container.appendChild(bookmarkButton);
     container.appendChild(shuffleButton);
 
     return container;
@@ -51,16 +59,19 @@ class AppNavigation extends HTMLElement {
 
   createStyle () {
     const styleElement = document.createElement('style');
+    const vp = this.getAttribute('viewport') || 'mobile';
     styleElement.innerHTML = `
         app-navigation {
           display: flex;
-          width: 100% !important;
           justify-content: center;
-          position: fixed;
-          bottom: 0;
-          right: 0;
-          left: 0;
-          z-index: 100;
+          ${vp === 'mobile' ? `
+            width: 100% !important;
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            z-index: 100;
+          ` : ``}
         }
         #navigation-wrapper {
           width: 100%;
@@ -84,6 +95,8 @@ class AppNavigation extends HTMLElement {
           justify-content: center;
           align-items: center;
           height: 100%;
+          font-family: "Times New Roman", Times, serif;
+          font-size: 15px;
         }
         .nav-icon {
           width: 40px;
