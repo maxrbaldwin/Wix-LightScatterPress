@@ -1,11 +1,15 @@
-const playButtonImgSrc = 'https://res.cloudinary.com/maxrbaldwin-com/image/upload/v1613761756/Wix-LightScatterPress/play.png';
-const pauseButtonImgSrc = 'https://res.cloudinary.com/maxrbaldwin-com/image/upload/v1613762001/Wix-LightScatterPress/pause.png';
+const playButtonImgSrc = 'https://static.wixstatic.com/media/bb0dab_d728ed43d28d49f296e0a1fbbc9762b2~mv2.png';
+const pauseButtonImgSrc = 'https://static.wixstatic.com/media/bb0dab_ae6779a0f3254fb294a20adb6fd4ca03~mv2.png';
 
 class AppCardModal extends HTMLElement {
   constructor() {
     super();
     this.root = document.createElement('div');
     this.player = document.createElement('audio');
+  }
+
+  getViewportAttribute() {
+    return this.getAttribute('viewport') || 'mobile';
   }
 
   connectedCallback() {
@@ -160,7 +164,7 @@ class AppCardModal extends HTMLElement {
       }
     }
 
-    close.src = 'https://res.cloudinary.com/maxrbaldwin-com/image/upload/v1613752844/Wix-LightScatterPress/x.png';
+    close.src = 'https://static.wixstatic.com/media/bb0dab_f1b78f85d6b44601acf5ff3fa9eff36f~mv2.png';
     closeButtonContainer.id = 'close-button';
     closeButtonContainer.append(close);
     closeButtonContainer.addEventListener('click', closeModal);
@@ -185,6 +189,7 @@ class AppCardModal extends HTMLElement {
   }
 
   createStyle() {
+    const vp = this.getViewportAttribute();
     const styleElement = document.createElement('style');
     styleElement.innerHTML = `
         app-card-modal {
@@ -211,11 +216,10 @@ class AppCardModal extends HTMLElement {
           flex-basis: 33%;
           position: relative;
         }
-        .button-image {
-          // position: fixed;
-        }
         #close-button {
-          flex-basis: 33%;
+          ${vp === 'mobile' || vp === 'tablet' ? `
+            flex-basis: 33%;
+          ` : ``}
           display: flex;
           justify-content: center;
         }
@@ -225,11 +229,11 @@ class AppCardModal extends HTMLElement {
         }
         #fixed-container {
           position: fixed;
-          bottom: 20px;
           width: 100%;
           display: flex;
           flex-direction: row;
           justify-content: space-evenly;
+          bottom: ${vp === 'mobile' || vp === 'tablet' ? '20px' : '40px'};
         }
         #spacer {
           flex-basis: 33%;

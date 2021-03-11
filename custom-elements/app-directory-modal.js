@@ -16,6 +16,8 @@ class AppDirectoryModal extends HTMLElement {
   createDirectoryRow(card, pos) {
       const self = this;
       const row = document.createElement('div');
+      const pageNumberContainer = document.createElement('div');
+      const pageNumber = document.createElement('p');
       
       function selectAndCloseModal(e) {
         self.dispatchEvent(new CustomEvent('close-directory-modal', {
@@ -31,8 +33,11 @@ class AppDirectoryModal extends HTMLElement {
         }
       }
 
+      pageNumber.innerText = `${card.pageNumber}`;
+      pageNumberContainer.appendChild(pageNumber);
+      row.appendChild(pageNumberContainer);
       row.classList.add('directory-row');
-      row.style.backgroundImage = `url(${card.backColor})`;
+      row.style.backgroundImage = `url(${card.front})`;
       row.addEventListener('click', selectAndCloseModal);
       row.addEventListener('touchstart', touchCloseModal);
       return row;
@@ -40,7 +45,7 @@ class AppDirectoryModal extends HTMLElement {
 
   createTitle() {
     const title = document.createElement('p');
-    title.innerText = 'Pick a card. Any card';
+    title.innerText = 'Draw a card';
     title.classList.add('modal-title');
     return title;
   }
@@ -60,7 +65,7 @@ class AppDirectoryModal extends HTMLElement {
       }
     }
 
-    close.src = 'https://res.cloudinary.com/maxrbaldwin-com/image/upload/v1613752844/Wix-LightScatterPress/x.png';
+    close.src = 'https://static.wixstatic.com/media/bb0dab_f1b78f85d6b44601acf5ff3fa9eff36f~mv2.png';
     closeButtonContainer.id = 'close-button';
     closeButtonContainer.append(close);
     closeButtonContainer.addEventListener('click', closeModal);
@@ -96,6 +101,8 @@ class AppDirectoryModal extends HTMLElement {
           flex-direction: row;
           align-items: center;
           padding: 0px 10px;
+          font-family: "Times New Roman", Times, serif;
+          justify-content: flex-end;
         }
         .modal-title {
           font-size: 25px;
