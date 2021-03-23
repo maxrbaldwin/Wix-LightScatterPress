@@ -2,7 +2,7 @@ import wixWindow from 'wix-window';
 
 $w.onReady(function () {
 	const context = wixWindow.lightbox.getContext();
-	const vp = wixWindow.formFactor
+	const vp = wixWindow.formFactor.toLocaleLowerCase();
 	$w('#CardModal').setAttribute('card', JSON.stringify(context.card));
 	$w('#CardModal').setAttribute('viewport', vp);
 

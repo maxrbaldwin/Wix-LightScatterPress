@@ -19,37 +19,116 @@ class AppCardModal extends HTMLElement {
     this.render();
   }
 
+  createPageNumberTopper(card) {
+    const topper = document.createElement('div');
+    const pageNumber = document.createElement('p');
+    pageNumber.innerHTML = `p.${card.pageNumber}`;
+    topper.id = 'page-number-topper';
+    topper.appendChild(pageNumber);
+    return topper;
+  }
+
   createCardImage(card) {
+    const container = document.createElement('div');
     const image = document.createElement('img');
+    const credit = document.createElement('div');
     image.src = card.front || card.backColor;
-    return image;
+    image.alt = card.title;
+    image.id = 'card-image';
+    credit.id = 'image-credit';
+    credit.innerHTML = `Illustration By : ${card.imageCredit}`;
+    container.id = 'card-image-container';
+    container.appendChild(image);
+    container.appendChild(credit);
+    return container;
   }
 
   createTitle(currentCard) {
-    const title = document.createElement('p');
-    title.innerText = currentCard.title;
+    const title = document.createElement('h2');
+    title.innerHTML = currentCard.title;
     return title;
   }
 
   createDescription(currentCard) {
     const desc = document.createElement('p');
-    desc.innerText = currentCard.desc;
+    desc.innerHTML = currentCard.desc;
+    desc.id = 'description';
     return desc;
   }
 
-  createAudio(src) {
+  createInstructions() {
+    const instructions = document.createElement('p');
+    instructions.innerHTML = 'When you’re ready to go back to print, close this card, then swipe to another, and use the page number to find your way back to the book.';
+    instructions.id = 'instructions';
+    return instructions;
+  }
+
+  createAudioDurationText(totalTime) {
+    const container = document.createElement('div');
+    // const elapsedContainer = document.createElement('div');
+    const elapsed = document.createElement('span');
+    const total = document.createElement('span');
+    elapsed.id = 'elapsed';
+    elapsed.innerText = '0:00';
+    total.id = 'total-time';
+    total.innerText = '0:00';
+    container.id = 'elapsed-container'
+    container.appendChild(elapsed);
+    container.appendChild(total);
+    return container;
+  }
+
+  createAudioCredit(currentCard) {
+    const container = document.createElement('div');
+    const credit = document.createElement('p');
+    credit.innerText = `Music By : ${currentCard.musicCredit}`;
+    credit.id = 'credit';
+    container.appendChild(credit);
+    return container; 
+  }
+
+  formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainder = Math.floor(seconds - minutes * 60);
+    const s = remainder < 10 ? `0${remainder}` : remainder;
+    return `${minutes}:${s}`;
+  }
+
+  createAudio(currentCard) {
     const self = this;
+    const container = document.createElement('div');
+    const fullTimer = document.createElement('div');
+    const movingTimer = document.createElement('div');
     const audio = this.player;
     const source = document.createElement('source');
-    source.src = src;
+    container.id = 'audio-container';
+    fullTimer.id = 'full-timer';
+    movingTimer.id = 'moving-timer';
+    source.src = currentCard.audio;
     source.type = 'audio/wav';
     audio.id = 'audio-player';
     audio.addEventListener('ended', function() {
       audio.currentTime = 0;
       self.setAudioButtonPlay();
     });
+    audio.addEventListener('canplaythrough', function () {
+      console.log('can play through')
+      self.root.querySelector('#total-time').innerText = self.formatTime(audio.duration);
+    });
+    audio.addEventListener('timeupdate', function(e) {
+      const percentElapsed = (audio.currentTime / audio.duration) * 100;
+      const visualElapsed = 100 - percentElapsed;
+      movingTimer.style.right = `${visualElapsed}%`;
+      self.root.querySelector('#elapsed').innerText = self.formatTime(audio.currentTime);
+    });
     audio.appendChild(source);
-    return audio;
+    container.append(this.createAudioCredit(currentCard));
+    fullTimer.appendChild(movingTimer);
+    container.appendChild(fullTimer);
+    container.appendChild(audio);
+    container.appendChild(this.createAudioDurationText());
+    this.tryAutoPlay();
+    return container;
   }
 
   tryAutoPlay() {
@@ -60,6 +139,7 @@ class AppCardModal extends HTMLElement {
       this.setAudioButtonPause();
     }).catch(err => {
       // Autoplay not allowed!
+      audio.load();
       this.setAudioButtonPlay();
     });
   }
@@ -102,12 +182,10 @@ class AppCardModal extends HTMLElement {
     pause.classList.remove('active');
     
     clone.addEventListener('click', function(e) {
-      e.preventDefault();
       self.playAudio(self)
       self.setAudioButtonPause();
     }, false);
     clone.addEventListener('touchstart', function(e) {
-      e.preventDefault();
       self.playAudio(self);
       self.setAudioButtonPause();
     }, false);
@@ -165,7 +243,8 @@ class AppCardModal extends HTMLElement {
     }
 
     close.src = 'https://static.wixstatic.com/media/bb0dab_f1b78f85d6b44601acf5ff3fa9eff36f~mv2.png';
-    closeButtonContainer.id = 'close-button';
+    closeButtonContainer.id = 'close-button-container';
+    close.id = 'close-button';
     closeButtonContainer.append(close);
     closeButtonContainer.addEventListener('click', closeModal);
     closeButtonContainer.addEventListener('touchstart', touchCloseModal);
@@ -174,30 +253,28 @@ class AppCardModal extends HTMLElement {
 
   createFixedContainer(currentCard) {
     const container = document.createElement('div');
-    const spacer = document.createElement('div');
+    const top = document.createElement('div');
+    const bottom = document.createElement('div');
     container.id = 'fixed-container';
-    spacer.id = 'spacer';
-    container.appendChild(spacer);
-    container.appendChild(this.createCloseButton());
-    if (currentCard.audio) {
-      container.appendChild(this.createAudio(currentCard.audio));
-      this.tryAutoPlay();
-      container.appendChild(this.createAudioButton());
-    }
-
+    bottom.id = 'bottom-fixed';
+    bottom.appendChild(this.createCloseButton());
+    top.id = 'top-fixed';
+    top.appendChild(this.createAudioButton());
+    top.appendChild(this.createAudio(currentCard));
+    container.appendChild(bottom);
+    container.appendChild(top);
     return container;
   }
 
   createStyle() {
     const vp = this.getViewportAttribute();
+    console.log('vp: ', vp);
     const styleElement = document.createElement('style');
     styleElement.innerHTML = `
         app-card-modal {
           background-color: #C8D9E3;
           display: flex;
           height: 100%;
-          height: -moz-available;
-          height: -webkit-fill-available;
           width: 100%;
           justify-content: center;
         }
@@ -207,42 +284,111 @@ class AppCardModal extends HTMLElement {
         #card-modal-container {
           display: flex;
           flex-direction: column;
-          align-items: center;
+          padding:${vp === 'mobile' ?  '10px 20px' : ' 10px 30px'};
         }
-        #card-modal-container img {
+        #card-image {
           width: 100%;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
         }
-        #audio-button {
-          flex-basis: 33%;
-          position: relative;
+        #image-credit {
+          background-color: #899FAE;
+          border-bottom-left-radius: 8px;
+          border-bottom-right-radius: 8px;
+          font-family: "Times New Roman", Times, serif;
+          font-weight: bold;
+          padding: 5px;
+          font-size: 10px;
         }
-        #close-button {
-          ${vp === 'mobile' || vp === 'tablet' ? `
-            flex-basis: 33%;
-          ` : ``}
-          display: flex;
-          justify-content: center;
+        #card-image-container {
+          border: 1px solid #000;
+          border-radius: 8px;
         }
-        #close-button img {
-          height: 40px;
-          width: 40px;
-        }
-        #fixed-container {
-          position: fixed;
-          width: 100%;
+        #page-number-topper {
+          font-style: italic;
           display: flex;
           flex-direction: row;
-          justify-content: space-evenly;
-          bottom: ${vp === 'mobile' || vp === 'tablet' ? '20px' : '40px'};
+          justify-content: flex-end;
+          font-size: 14px;
+          margin-bottom: 5px;
+          font-weight: bold;
         }
-        #spacer {
-          flex-basis: 33%;
+        #description, #card-modal-wrapper h2, #instructions, #page-number-topper {
+          font-family: "Times New Roman", Times, serif;
+        }
+        #description, #instructions {
+          font-size: ${vp === 'mobile' ? '15px': '18px'};
+          margin-bottom: 20px;
+        }
+        #card-modal-wrapper h2 {
+          font-size: 25px;
+          margin: 20px 0px 10px 0px;
+        }
+        #audio-button {
+          position: relative;
+        }
+        #close-button-container {
+          display: flex;
+          justify-content: center;
+          padding: 10px 0px;
+        }
+        #close-button, .button-image {
+          height: 35px;
+          width: 35px;
+        }
+        #fixed-container {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-evenly;
         }
         .active {
           display: block;
         }
         .inactive {
           display: none;
+        }
+        #top-fixed {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          padding: 5px 20px;
+          border-bottom: 2px solid #374955;
+          border-top: 2px solid #374955;
+          background-color: #899FAE;
+        }
+        #bottom-fixed {
+          background-color: #C8D9E3;
+        }
+        #audio-container {
+          width: 100%;
+          padding: 0px 20px;
+        }
+        #full-timer {
+          width: 100%;
+          height: 5px;
+          position: relative;
+          background-color: #fff;
+        }
+        #moving-timer {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          background-color: #EE6823;
+        }
+        #full-timer, #moving-timer {
+          border-radius: 5px;
+        }
+        #elapsed-container {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 2px;
+        }
+        #credit {
+          font-family: "Times New Roman", Times, serif;
+          font-weight: bold;
+          margin-bottom: 2px;
+          font-size: 10px;
         }
       `;
     return styleElement;
@@ -257,10 +403,12 @@ class AppCardModal extends HTMLElement {
 
     const container = this.root.querySelector('#card-modal-container');
 
+    container.appendChild(this.createPageNumberTopper(currentCard));
     container.appendChild(this.createCardImage(currentCard));
     container.appendChild(this.createTitle(currentCard));
     container.appendChild(this.createDescription(currentCard));
-    container.appendChild(this.createFixedContainer(currentCard));
+    container.appendChild(this.createInstructions());
+    this.root.appendChild(this.createFixedContainer(currentCard));
   }
 }
 customElements.define('app-card-modal', AppCardModal);

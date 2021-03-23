@@ -1,18 +1,25 @@
 import cards, { data as cardData, defaultCard } from 'public/cards';
 
+const CARD_TOP_DISTANCE = 10;
+
 class AppCarousel extends HTMLElement {
   constructor() {
     super();
     this.root = document.createElement('div');
+    this.firstCard = {};
   }
 
   static get observedAttributes() {
-    return ['card', 'deck', 'viewport', 'refresh', 'shuffle'];
+    return ['card', 'deck', 'viewport', 'refresh', 'shuffle', 'bookmark'];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
+    console.log('change: ', name, oldValue, newValue);
     if (name === 'card') {
       this.forceFirstCard(JSON.parse(newValue));
+    } else if (name === 'bookmark' && oldValue !== null) {
+      const card = this.firstCard;
+      this.forceFirstCard(card);
     } else if (name === 'refresh' && oldValue !== null) {
       const card = this.getCardAttribute();
       this.forceFirstCard(JSON.parse(card));
@@ -37,20 +44,19 @@ class AppCarousel extends HTMLElement {
     const currentCard = this.getCardAttribute();
     const deck = this.getDeckAttribute(currentCard);
     const vp = this.getViewportAttribute();
-    const stackTotal = vp === 'mobile' ? 5 : 14;
 
     this.root.id = "carousel-wrapper";
     this.appendChild(this.root);
     this.appendChild(this.createStyle());
     // the visual representation
     this.stack = deck.data;
+    this.firstCard = deck.data[0];
     this.mount();
   }
 
   shuffle() {
     const vp = this.getViewportAttribute();
     const self = this;
-    const container = this.root.querySelector('#carousel-container');
     const allTheCards = [...this.root.querySelectorAll('.card')];
 
     // step-one : bring all the cards together
@@ -60,7 +66,7 @@ class AppCarousel extends HTMLElement {
         const transitions = allTheCards.map((cardEl, i) => {
           return new Promise(resolve => {
             if (i === 0) {
-              self.unmakeFirstCard(cardEl);
+              self.removeFirstCardClasses(cardEl);
             }
             cardEl.addEventListener('transitionend', function stepOneTransition () {
               cardEl.removeEventListener('transitionend', stepOneTransition);
@@ -176,7 +182,7 @@ class AppCarousel extends HTMLElement {
           cardEl.style.MozTransition = transition;
           cardEl.style.msTransition = transition;
           cardEl.style.OTransition = transition;
-          cardEl.style.top = `${10 * i}px`;
+          cardEl.style.top = `${CARD_TOP_DISTANCE * i}px`;
         })
       });
 
@@ -189,9 +195,12 @@ class AppCarousel extends HTMLElement {
 
     function stepSeven() {
       return new Promise(resolveStepSeven => {
-        const firstCard = document.querySelector('.card');
-        const firstCardData = JSON.parse(firstCard.dataset.card);
-        self.makeFirstCard(firstCard, firstCardData);
+        const newFirstCard = document.querySelector('.card');
+        const newFirstCardData = JSON.parse(newFirstCard.dataset.card);
+        const currentFirstCard = document.querySelector('#first');
+        const clone = self.removeFirstCardEventListeners(currentFirstCard);
+        self.root.querySelector('#carousel-container').replaceChild(clone, currentFirstCard);
+        self.makeFirstCard(newFirstCard, newFirstCardData);
         resolveStepSeven();
       })
     }
@@ -247,14 +256,11 @@ class AppCarousel extends HTMLElement {
     cardFront.style.backgroundImage = `url(${card.front})`;
 
     cardBack.style.backgroundImage = `url(${card.backColor})`;
+    cardBack.setAttribute('role', 'img');
+    cardBack.setAttribute('aria-label', card.title);
     cardBack.classList.add('card-back');
 
-    if (vp === 'mobile') {
-      cardContainer.style.top = `${10 * pos}px`;
-    } else {
-      // container width divided by the amount of cards
-      cardContainer.style.right = `${45 * pos}px`;
-    }
+    cardContainer.style.top = `${CARD_TOP_DISTANCE * pos}px`;
     cardContainer.style.zIndex = `${cardData.length - pos}`;
     cardContainer.classList.add('card');
     cardContainer.dataset.card = JSON.stringify(card);
@@ -307,6 +313,7 @@ class AppCarousel extends HTMLElement {
     }
 
     function move(moveEvent) {
+      if (!startX) return;
       const moveX = moveEvent.targetTouches ? moveEvent.targetTouches[0].pageX : moveEvent.pageX;
       isAnimated = true;
       pullX = moveX - startX;
@@ -332,36 +339,43 @@ class AppCarousel extends HTMLElement {
       // prevent window level swipes
       touchStartEvent.preventDefault();
       startX =  touchStartEvent.targetTouches[0].pageX;
-      cardContainer.addEventListener('touchmove', move);
-      cardContainer.addEventListener('touchend', end);
     }
 
     function handleDrag (mouseDownEvent) {
-      // mouseDownEvent.stopPropagation();
-      // mouseDownEvent.preventDefault();
+      mouseDownEvent.stopPropagation();
+      mouseDownEvent.preventDefault();
       startX = mouseDownEvent.pageX;
-      cardContainer.addEventListener('contextmenu', clearEvents)
+      
       cardContainer.addEventListener('mousemove', move);
-      cardContainer.addEventListener('mouseup', end);
     }
   
     cardContainer.id = 'first';
+    // desktop events
     cardContainer.addEventListener('mousedown', handleDrag, false);
+    cardContainer.addEventListener('mouseup', end);
+    cardContainer.addEventListener('contextmenu', clearEvents);
+    // mobile events
     cardContainer.addEventListener('touchstart', handleTouch, false);
+    cardContainer.addEventListener('touchmove', move);
+    cardContainer.addEventListener('touchend', end);
 
     cardContainer.querySelector('.card-inner').classList.add('flip');
 
     return cardContainer;
   }
   // remove everything from first card that makes it special. classes, ids, animations, events
-  unmakeFirstCard() {
-    const cardHtml = this.root.querySelector('#first');
-    cardHtml.removeAttribute('id');
+  removeFirstCardClasses(cardHtml) {
     cardHtml.querySelector('.card-inner').classList.remove('flip');
     cardHtml.classList.remove('release-left');
     cardHtml.classList.remove('release-right');
     // clone node removes event listeners
-    return cardHtml.cloneNode(true);
+    return cardHtml;
+  }
+
+  removeFirstCardEventListeners(cardHtml) {
+    cardHtml.removeAttribute('id');
+    cardHtml.cloneNode(true);
+    return cardHtml;
   }
 
   next () {
@@ -384,24 +398,10 @@ class AppCarousel extends HTMLElement {
         card.style.MozTransition = transition;
         card.style.msTransition = transition;
         card.style.OTransition = transition;
-        card.style.top = `${parseInt(card.style.top.split('px')[0]) - 10}px`;
+        card.style.top = `${parseInt(card.style.top.split('px')[0]) - CARD_TOP_DISTANCE}px`;
         card.style.zIndex = parseInt(card.style.zIndex) + 1;
       }
-      function animateRight() {
-        const transition = 'right 1s';
-        card.style.webkitTransition = transition;
-        card.style.MozTransition = transition;
-        card.style.msTransition = transition;
-        card.style.OTransition = transition;
-        card.style.right = `${parseInt(card.style.right.split('px')[0]) - 45}px`;
-        card.style.zIndex = parseInt(card.style.zIndex) + 1;
-      }
-
-      if (vp === 'desktop') {
-        animateRight();
-      } else if (vp === 'mobile') {
-        animateTop();
-      }
+      animateTop();
     });
     const newFirstCardHtml = moveNodeList.item(0)
     const newFirstCardData = JSON.parse(newFirstCardHtml.dataset.card);
@@ -413,6 +413,7 @@ class AppCarousel extends HTMLElement {
 
   createStyle () {
     const styleElement = document.createElement('style');
+    const clientHeight = document.body.clientHeight;
     const vp = this.getViewportAttribute();
     styleElement.innerHTML = `
         app-carousel {
@@ -429,9 +430,7 @@ class AppCarousel extends HTMLElement {
           max-height: 350px;
           width: 100%;
           height: 100%;
-          ${vp === 'mobile' ? `
-            max-width: 300px;
-          ` : ``}
+          max-width: 300px;
         }
         #carousel-container {
           position: relative;
@@ -440,15 +439,9 @@ class AppCarousel extends HTMLElement {
         }
         .card {
           position: absolute;
-          ${vp === 'mobile' ? `
-            left: 0;
-            right: 0;
-            height: 300px;
-            transform: perspective(100em) rotateX(55deg);
-          `: `
-            width: 300px;
-            height: 350px;
-          `}
+          left: 0;
+          right: 0;
+          height: ${vp === 'mobile' ? '250px' : '350px'};
         }
         .card-front {
           background-position: center;
@@ -456,7 +449,7 @@ class AppCarousel extends HTMLElement {
           background-size: 100% 100%;
         }
         #first {
-          z-index: 20 !important;
+          // z-index: 20 !important;
         }
         .flip {
           animation-duration: 1s;
@@ -552,12 +545,12 @@ class AppCarousel extends HTMLElement {
             top: 0px;
           }
           to {
-            top: 400px;
+            top: ${clientHeight}px;
           }
         }
         @keyframes slideup {
           from {
-            top: 400px;
+            top: ${clientHeight}px;
           }
           to {
             top: 0px;
