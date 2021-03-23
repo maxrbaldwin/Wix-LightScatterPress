@@ -1,12 +1,14 @@
 import cards, { data as cardData, defaultCard } from 'public/cards';
 
 const CARD_TOP_DISTANCE = 10;
+const loadingGifSrc = 'https://static.wixstatic.com/media/bb0dab_17647a52e25f436dacdbd4ebcb966a6a~mv2.gif';
 
 class AppCarousel extends HTMLElement {
   constructor() {
     super();
     this.root = document.createElement('div');
     this.firstCard = {};
+    this.loadingGif = document.createElement('img');
   }
 
   static get observedAttributes() {
@@ -14,7 +16,6 @@ class AppCarousel extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log('change: ', name, oldValue, newValue);
     if (name === 'card') {
       this.forceFirstCard(JSON.parse(newValue));
     } else if (name === 'bookmark' && oldValue !== null) {
@@ -40,11 +41,24 @@ class AppCarousel extends HTMLElement {
     return this.getAttribute('viewport') || 'mobile';
   }
 
+  applyLoadingGif() {
+    const loadingGifTimeout = 3000;
+    const loadingGifContainer = document.createElement('div');
+    loadingGifContainer.id = 'loading-gif-container';
+    loadingGifContainer.appendChild(this.loadingGif);
+    this.root.appendChild(loadingGifContainer);
+    const removeLoadingGifTimeout = setTimeout(() => {
+      this.root.removeChild(loadingGifContainer);
+      clearTimeout(removeLoadingGifTimeout);
+    }, loadingGifTimeout);
+  }
+
   connectedCallback() {
     const currentCard = this.getCardAttribute();
     const deck = this.getDeckAttribute(currentCard);
     const vp = this.getViewportAttribute();
 
+    this.loadingGif.src = loadingGifSrc;
     this.root.id = "carousel-wrapper";
     this.appendChild(this.root);
     this.appendChild(this.createStyle());
@@ -286,6 +300,7 @@ class AppCarousel extends HTMLElement {
     let isAnimated = false;
 
     function openModal() {
+      self.applyLoadingGif();
       self.dispatchEvent(new CustomEvent('open-card-modal', { detail: { card: card }}));
     }
 
@@ -448,8 +463,22 @@ class AppCarousel extends HTMLElement {
           background-repeat: no-repeat;
           background-size: 100% 100%;
         }
-        #first {
-          // z-index: 20 !important;
+        #loading-gif-container {
+          z-index: 20;
+          position: absolute;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          height: ${vp === 'mobile' ? '250px' : '350px'};
+          width: ${vp === 'mobile' ? '200px' : '300px'};
+          align-items: center;
+          background-color: #899FAE;
+          border-radius: 8px;
+          opacity: 0.6;
+        }
+        #loading-gif-container img {
+          width: 50px;
+          height: 50px;
         }
         .flip {
           animation-duration: 1s;
