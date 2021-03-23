@@ -33,10 +33,12 @@ class AppDirectoryModal extends HTMLElement {
         }
       }
 
-      pageNumber.innerText = `${card.pageNumber}`;
+      pageNumber.innerText = `p.${card.pageNumber}`;
       pageNumberContainer.appendChild(pageNumber);
       row.appendChild(pageNumberContainer);
       row.classList.add('directory-row');
+      row.style.top = `${40 * pos}px`;
+      row.style.zIndex = `${pos}`;
       row.style.backgroundImage = `url(${card.front})`;
       row.addEventListener('click', selectAndCloseModal);
       row.addEventListener('touchstart', touchCloseModal);
@@ -74,6 +76,7 @@ class AppDirectoryModal extends HTMLElement {
   }
 
   createStyle() {
+    const vp = this.getAttribute('viewport');
     const styleElement = document.createElement('style');
     styleElement.innerHTML = `
         app-directory-modal {
@@ -90,19 +93,32 @@ class AppDirectoryModal extends HTMLElement {
           padding: 20px 10px;
           text-align: center;
         }
+        #card-container {
+          position: relative;
+          display: inline-flex;
+          flex-direction: column;
+          align-items: center;
+        }
         .directory-row {
-          min-height: 50px;
+          position: absolute;
           font-size: 15px;
-          background-position: center top;
-          background-size: 100% auto;
-          border-top-left-radius: 5px;
-          border-top-right-radius: 5px;
+          background-position: center;
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          border-radius: 8px;
           display: flex;
           flex-direction: row;
-          align-items: center;
-          padding: 0px 10px;
+          padding: 10px 10px;
           font-family: "Times New Roman", Times, serif;
           justify-content: flex-end;
+          height: ${vp === 'mobile' ? '300px' : '400px'};
+          width: ${vp === 'mobile' ? '250px' : '350px'};
+          border: 1px solid #000;
+        }
+        .directory-row p {
+          font-style: italic;
+          text-shadow: 1px 1px 0 #fff;
+          font-size: 16px;
         }
         .modal-title {
           font-size: 25px;
@@ -115,6 +131,7 @@ class AppDirectoryModal extends HTMLElement {
           bottom: 20px;
           left: 0;
           right: 0;
+          z-index: 16;
         }
         #close-button img {
           height: 40px;
@@ -125,13 +142,14 @@ class AppDirectoryModal extends HTMLElement {
   };
 
   render() {
-    this.root.innerHTML = `<div id="directory-modal-container"></div>`;
+    this.root.innerHTML = `<div id="directory-modal-container"><div id="card-container"></div></div>`;
 
     const container = this.root.querySelector('#directory-modal-container');
-    container.append(this.createTitle());
+    const cardContainer = this.root.querySelector('#card-container');
+    container.prepend(this.createTitle());
     container.append(this.createCloseButton());
     cardData.forEach((card, i) => {
-        container.append(this.createDirectoryRow(card, i));
+        cardContainer.append(this.createDirectoryRow(card, i));
     })
   }
 }
