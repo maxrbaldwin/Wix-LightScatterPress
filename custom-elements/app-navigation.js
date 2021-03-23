@@ -27,7 +27,7 @@ class AppNavigation extends HTMLElement {
       const icons = {
         open: '<img src="https://static.wixstatic.com/media/bb0dab_469058bc9aef4cedadbd0f7bc54f0fb0~mv2.png" class="nav-icon" />',
         shuffle: '<img src="https://static.wixstatic.com/media/bb0dab_6e59c95cda0a41a1b2f80e111e53eb99~mv2.png" class="nav-icon" />',
-        bookmark: `<div id="bookmark">${self.getCardAttribute().pageNumber}</div>`,
+        bookmark: `<div id="bookmark"><sub>p.</sub>${self.getCardAttribute().pageNumber}</div>`,
       };
 
       button.innerHTML = icons[iconKey];
@@ -64,14 +64,12 @@ class AppNavigation extends HTMLElement {
         app-navigation {
           display: flex;
           justify-content: center;
-          ${vp === 'mobile' ? `
-            width: 100% !important;
-            position: fixed;
-            bottom: 0;
-            right: 0;
-            left: 0;
-            z-index: 100;
-          ` : ``}
+          width: 100% !important;
+          position: fixed;
+          bottom: 0;
+          right: 0;
+          left: 0;
+          z-index: 100;
         }
         #navigation-wrapper {
           width: 100%;
@@ -104,6 +102,10 @@ class AppNavigation extends HTMLElement {
         }
         #openNavItem {
           border-right: 1px solid #899FAE;
+        }
+        #bookmark {
+          font-size: ${vp === 'mobile' ? '20px' : '30px'};
+          font-style: italic;
         }
       `;
     return styleElement;
