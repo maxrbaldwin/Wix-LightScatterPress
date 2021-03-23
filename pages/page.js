@@ -14,6 +14,9 @@ const appNavigationSelector = '#AppNavigation';
 const pageCommands = {
     openCardModal: function(context) {
         wixWindow.openLightbox('CardModal', context)
+            .then(() => {
+                wixWindow.scrollTo(0, 0);
+            })
             .catch(err => {
                 console.log('Catch in open card modal: ', err);
             });
@@ -68,7 +71,6 @@ $w.onReady(function () {
         }
         // hack to force the deck to change the first card when the "card" attr doesn't change
         $w(appCarouselSelector).setAttribute('bookmark', getRefresh());
-        $w(appCarouselSelector).setAttribute('card', firstCardData);
     });
 
     $w(appNavigationSelector).on('shuffle', function(e) {
