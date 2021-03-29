@@ -25,11 +25,11 @@ const thismorning = 'https://static.wixstatic.com/mp3/bb0dab_b90a3b31b01c4104ac1
 const wishbone = 'https://static.wixstatic.com/mp3/bb0dab_0dbb2a85c268401ab6c705f15b75b8b7.wav';
 const august = 'https://static.wixstatic.com/mp3/bb0dab_1179c0c3742141a09af1fa3681d8283a.wav';
 const afterlife = 'https://static.wixstatic.com/mp3/bb0dab_89b9acc5120643c1a9d977e49ab64506.wav';
-const waterandstone = 'https://static.wixstatic.com/mp3/bb0dab_cfd25df0d40247509c767f2ede6a9fce.m4a';
-const inthebighouse = 'https://static.wixstatic.com/mp3/bb0dab_c8b8b5d1c4c04f03b9d7bbdac9bb7586.m4a';
-const verysmall = 'https://static.wixstatic.com/mp3/bb0dab_3439972add9344d58191b00ce43345b2.m4a';
-const practical = 'https://static.wixstatic.com/mp3/bb0dab_1b058fc1b7a944ff83f3ebfc91c096ca.m4a';
-const natureofobjects = 'https://static.wixstatic.com/mp3/bb0dab_887514e4621a4618a3bd37d650284e2f.m4a';
+const waterandstone = 'https://static.wixstatic.com/mp3/bb0dab_909850c7ad644697a306b40f67b3f764.mp3';
+const inthebighouse = 'https://static.wixstatic.com/mp3/bb0dab_28f0011b26584548a1a6fbf9c9b47fd8.mp3';
+const verysmall = 'https://static.wixstatic.com/mp3/bb0dab_83810e5633f542aa9ca1070e5dd73004.mp3';
+const practical = 'https://static.wixstatic.com/mp3/bb0dab_34d3e825f00846fd83af8478819a67ba.mp3';
+const natureofobjects = 'https://static.wixstatic.com/mp3/bb0dab_87e2bcdb5d5749608b6ca17bef1787ff.mp3';
 const gaia = 'https://static.wixstatic.com/mp3/bb0dab_3a8357b076cf43db8c3b6a1f7a9d21d1.wav';
 
 
