@@ -30,7 +30,7 @@ const inthebighouse = 'https://static.wixstatic.com/mp3/bb0dab_c8b8b5d1c4c04f03b
 const verysmall = 'https://static.wixstatic.com/mp3/bb0dab_3439972add9344d58191b00ce43345b2.m4a';
 const practical = 'https://static.wixstatic.com/mp3/bb0dab_1b058fc1b7a944ff83f3ebfc91c096ca.m4a';
 const natureofobjects = 'https://static.wixstatic.com/mp3/bb0dab_887514e4621a4618a3bd37d650284e2f.m4a';
-const gaia = 'https://static.wixstatic.com/mp3/bb0dab_c8b8b5d1c4c04f03b9d7bbdac9bb7586.m4a';
+const gaia = 'https://static.wixstatic.com/mp3/bb0dab_3a8357b076cf43db8c3b6a1f7a9d21d1.wav';
 
 
 export const data = [
@@ -64,8 +64,8 @@ export const data = [
     front: 'https://static.wixstatic.com/media/bb0dab_69f853a6dbd747e08d046d201c719661~mv2.png',
     audio: sevenoclock,
     pageNumber: 35,
-    imageCredit: 'Kristy Sabey',
-    musicCredit: 'Isaac Bickmore',
+    imageCredit: 'Kris Parkinson',
+    musicCredit: 'Alex Duran',
   },
   {
     id: '10004',
