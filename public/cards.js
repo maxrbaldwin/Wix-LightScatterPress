@@ -44,6 +44,8 @@ export const data = [
     pageNumber: 16,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Isaac Bickmore',
+    altText: '',
+    audioAltText: '',
   },
   {
     id: '10002',
@@ -55,10 +57,12 @@ export const data = [
     pageNumber: 17,
     imageCredit: 'Kristy Sabey',
     musicCredit: 'Isaac Bickmore',
+    altText: '',
+    audioAltText: '',
   },
   {
     id: '10003',
-    title: "Seven PM",
+    title: "Seven p.m.",
     desc: "Each scale is a prism;<br>yellow leaf, crimson vein, gold-edged cloud.",
     backColor: gold,
     front: 'https://static.wixstatic.com/media/bb0dab_69f853a6dbd747e08d046d201c719661~mv2.png',
@@ -66,6 +70,8 @@ export const data = [
     pageNumber: 35,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Alex Duran',
+    altText: '',
+    audioAltText: '',
   },
   {
     id: '10004',
@@ -77,6 +83,8 @@ export const data = [
     pageNumber: 41,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Alex Duran',
+    altText: '',
+    audioAltText: '',
   },
   {
     id: '10005',
@@ -88,10 +96,12 @@ export const data = [
     pageNumber: 42,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Alex Duran',
+    altText: '',
+    audioAltText: '',
   },
   {
     id: '10006',
-    title: 'Did you see us this morning, at the station at 6',
+    title: 'Did You See Us This Morning, at the Station at Six',
     desc: "I forgot to lick the icicles that cling to the peeling sill. What color is the underside of a pigeon’s silken wing?",
     backColor: paleYellow,
     front: 'https://static.wixstatic.com/media/bb0dab_af2d252da6b646a1bf91fa3f73e283e6~mv2.png',
@@ -99,10 +109,12 @@ export const data = [
     pageNumber: 43,
     imageCredit: 'Kristy Sabey',
     musicCredit: 'Alex Duran',
+    altText: '',
+    audioAltText: '',
   },
   {
     id: '10007',
-    title: 'In The Big House',
+    title: 'In the Big House',
     desc: "You’re like the glass,<br>the bars, the troughs of hay and clover,<br>the bulbs that dance through rusted mesh,<br>like sunlight through acacia, once.",
     backColor: green,
     front: 'https://static.wixstatic.com/media/bb0dab_396ea82db4bb459bb18a4b18f542fea5~mv2.png',
@@ -110,6 +122,8 @@ export const data = [
     pageNumber: 32,
     imageCredit: 'Kristy Sabey',
     musicCredit: 'Isaac Bickmore',
+    altText: '',
+    audioAltText: '',
   },
   {
     id: '10008',
@@ -121,6 +135,8 @@ export const data = [
     pageNumber: 47,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Isaac Bickmore',
+    altText: '',
+    audioAltText: '',
   },
   {
     id: '10009',
@@ -132,6 +148,8 @@ export const data = [
     pageNumber: 58,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Alex Duran',
+    altText: '',
+    audioAltText: '',
   },
   {
     id: '10010',
@@ -143,6 +161,8 @@ export const data = [
     pageNumber: 62,
     imageCredit: 'Kristy Sabey',
     musicCredit: 'Alex Duran',
+    altText: '',
+    audioAltText: '',
   },
   {
     id: '10011',
@@ -154,6 +174,8 @@ export const data = [
     pageNumber: 65,
     imageCredit: 'Kristy Sabey',
     musicCredit: 'Isaac Bickmore',
+    altText: '',
+    audioAltText: '',
   },
   {
     id: '10012',
@@ -165,6 +187,8 @@ export const data = [
     pageNumber: 79,
     imageCredit: 'Kristy Sabey',
     musicCredit: 'Alex Duran',
+    altText: '',
+    audioAltText: '',
   },
   {
     id: '10013',
@@ -176,6 +200,8 @@ export const data = [
     pageNumber: 84,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Isaac Bickmore',
+    altText: '',
+    audioAltText: '',
   },
   {
     id: '10014',
@@ -187,10 +213,12 @@ export const data = [
     pageNumber: 86,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Isaac Bickmore',
+    altText: '',
+    audioAltText: '',
   },
   {
     id: '10015',
-    title: 'Nature of Objects',
+    title: 'The Nature of Objects',
     desc: "Leaves flamed,<br>dried, dropped, the car died—the dog, too—",
     backColor: grayBrown,
     front: 'https://static.wixstatic.com/media/bb0dab_3dd171d451634572b89449377e660e29~mv2.png',
@@ -198,6 +226,8 @@ export const data = [
     pageNumber: 89,
     imageCredit: 'Jim Anderson',
     musicCredit: 'Isaac Bickmore',
+    altText: '',
+    audioAltText: '',
   },
 ];
 
