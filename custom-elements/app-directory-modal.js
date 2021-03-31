@@ -42,6 +42,7 @@ class AppDirectoryModal extends HTMLElement {
       row.style.backgroundImage = `url(${card.front})`;
       row.addEventListener('click', selectAndCloseModal);
       row.addEventListener('touchstart', touchCloseModal);
+      row.setAttribute('aria-label', card.altText);
       return row;
   }
 
@@ -142,7 +143,7 @@ class AppDirectoryModal extends HTMLElement {
   };
 
   render() {
-    this.root.innerHTML = `<div id="directory-modal-container"><div id="card-container"></div></div>`;
+    this.root.innerHTML = `<div aria-modal="true" id="directory-modal-container"><div id="card-container"></div></div>`;
 
     const container = this.root.querySelector('#directory-modal-container');
     const cardContainer = this.root.querySelector('#card-container');
