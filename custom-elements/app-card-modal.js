@@ -1,11 +1,13 @@
 const playButtonImgSrc = 'https://static.wixstatic.com/media/bb0dab_d728ed43d28d49f296e0a1fbbc9762b2~mv2.png';
 const pauseButtonImgSrc = 'https://static.wixstatic.com/media/bb0dab_ae6779a0f3254fb294a20adb6fd4ca03~mv2.png';
+const loadingGifSrc = 'https://static.wixstatic.com/media/bb0dab_17647a52e25f436dacdbd4ebcb966a6a~mv2.gif';
 
 class AppCardModal extends HTMLElement {
   constructor() {
     super();
     this.root = document.createElement('div');
     this.player = document.createElement('audio');
+    this.isPlayingAudio = false;
   }
 
   getViewportAttribute() {
@@ -23,6 +25,7 @@ class AppCardModal extends HTMLElement {
     const topper = document.createElement('div');
     const pageNumber = document.createElement('p');
     pageNumber.innerHTML = `p.${card.pageNumber}`;
+    pageNumber.setAttribute('aria-label', `page number ${card.pageNumber}`);
     topper.id = 'page-number-topper';
     topper.appendChild(pageNumber);
     return topper;
@@ -33,8 +36,9 @@ class AppCardModal extends HTMLElement {
     const image = document.createElement('img');
     const credit = document.createElement('div');
     image.src = card.front || card.backColor;
-    image.alt = card.title;
     image.id = 'card-image';
+    image.setAttribute('role', 'image');
+    image.setAttribute('aria-label', card.altText);
     credit.id = 'image-credit';
     credit.innerHTML = `Illustration By : ${card.imageCredit}`;
     container.id = 'card-image-container';
@@ -65,7 +69,6 @@ class AppCardModal extends HTMLElement {
 
   createAudioDurationText(totalTime) {
     const container = document.createElement('div');
-    // const elapsedContainer = document.createElement('div');
     const elapsed = document.createElement('span');
     const total = document.createElement('span');
     elapsed.id = 'elapsed';
@@ -94,6 +97,19 @@ class AppCardModal extends HTMLElement {
     return `${minutes}:${s}`;
   }
 
+  getAudioType(src) {
+    const mp3Expression = '.mp3';
+    const wavExpression = '.wav';
+
+    if (src.match(mp3Expression)) {
+      return 'audio/mp3';
+    } else if (src.match(wavExpression)) {
+      return 'audio/wav';
+    }
+
+    return 'audio/mp3';
+  }
+
   createAudio(currentCard) {
     const self = this;
     const container = document.createElement('div');
@@ -104,15 +120,15 @@ class AppCardModal extends HTMLElement {
     container.id = 'audio-container';
     fullTimer.id = 'full-timer';
     movingTimer.id = 'moving-timer';
+    source.type = self.getAudioType(currentCard.audio);
     source.src = currentCard.audio;
-    source.type = 'audio/wav';
     audio.id = 'audio-player';
     audio.addEventListener('ended', function() {
       audio.currentTime = 0;
       self.setAudioButtonPlay();
     });
     audio.addEventListener('canplaythrough', function () {
-      console.log('can play through')
+      self.tryAutoPlay();
       self.root.querySelector('#total-time').innerText = self.formatTime(audio.duration);
     });
     audio.addEventListener('timeupdate', function(e) {
@@ -121,13 +137,25 @@ class AppCardModal extends HTMLElement {
       movingTimer.style.right = `${visualElapsed}%`;
       self.root.querySelector('#elapsed').innerText = self.formatTime(audio.currentTime);
     });
+    document.addEventListener('keydown', function(e) {
+      if (e.code === 'Space') {
+        if (self.isPlayingAudio) {
+          self.setAudioButtonPlay()
+          self.pauseAudio(self)
+        } else if (!self.isPlayingAudio) {
+          self.setAudioButtonPause()
+          self.playAudio(self);
+        }
+      }
+    })
     audio.appendChild(source);
     container.append(this.createAudioCredit(currentCard));
     fullTimer.appendChild(movingTimer);
+    container.setAttribute('aria-label', currentCard.audioAltText);
     container.appendChild(fullTimer);
     container.appendChild(audio);
     container.appendChild(this.createAudioDurationText());
-    this.tryAutoPlay();
+    audio.load();
     return container;
   }
 
@@ -136,10 +164,11 @@ class AppCardModal extends HTMLElement {
     const promise = audio.play();
     promise.then(e => {
       // Autoplay started!
+      this.isPlayingAudio = true;
       this.setAudioButtonPause();
     }).catch(err => {
       // Autoplay not allowed!
-      audio.load();
+      this.isPlayingAudio = false;
       this.setAudioButtonPlay();
     });
   }
@@ -148,22 +177,33 @@ class AppCardModal extends HTMLElement {
     const buttonContainer = document.createElement('div');
     const buttonPlay = document.createElement('button');
     const buttonPause = document.createElement('button');
+    const buttonLoading = document.createElement('button');
     const buttonImagePlay = document.createElement('img');
     const buttonImagePause = document.createElement('img');
+    const buttonImageLoading = document.createElement('img');
     
     buttonContainer.id = 'audio-button';
     buttonImagePlay.src = playButtonImgSrc;
     buttonImagePlay.classList.add('button-image');
+    buttonImagePlay.setAttribute('aria-label', 'play audio button');
     buttonPlay.id = 'audio-play';
-    buttonPlay.classList.add('active');
+    buttonPlay.classList.add('inactive');
 
     buttonImagePause.src = pauseButtonImgSrc;
     buttonImagePause.classList.add('button-image');
+    buttonImagePause.setAttribute('aria-label', 'pause audio button');
     buttonPause.classList.add('inactive');
     buttonPause.id = 'audio-pause';
 
+    buttonImageLoading.src = loadingGifSrc;
+    buttonImageLoading.classList.add('button-image');
+    buttonLoading.classList.add('active');
+    buttonLoading.id = 'audio-loading';
+
+    buttonLoading.append(buttonImageLoading);
     buttonPlay.append(buttonImagePlay);
     buttonPause.append(buttonImagePause);
+    buttonContainer.append(buttonLoading);
     buttonContainer.append(buttonPlay);
     buttonContainer.append(buttonPause);
     return buttonContainer;
@@ -175,11 +215,14 @@ class AppCardModal extends HTMLElement {
     const clone = this.createAudioButton()
     const play = clone.querySelector('#audio-play');
     const pause = clone.querySelector('#audio-pause');
-    
+    const loading = clone.querySelector('#audio-loading');
+
     play.classList.add('active');
     play.classList.remove('inactive');
     pause.classList.add('inactive');
     pause.classList.remove('active');
+    loading.classList.remove('active');
+    loading.classList.add('inactive');
     
     clone.addEventListener('click', function(e) {
       self.playAudio(self)
@@ -199,11 +242,14 @@ class AppCardModal extends HTMLElement {
     const clone = this.createAudioButton();
     const play = clone.querySelector('#audio-play');
     const pause = clone.querySelector('#audio-pause');
+    const loading = clone.querySelector('#audio-loading');
     
     play.classList.add('inactive');
     play.classList.remove('active');
     pause.classList.add('active');
     pause.classList.remove('inactive');
+    loading.classList.remove('active');
+    loading.classList.add('inactive');
     
     clone.addEventListener('click', function(e) {
       e.preventDefault();
@@ -220,10 +266,12 @@ class AppCardModal extends HTMLElement {
   }
 
   playAudio(self) {
+    this.isPlayingAudio = true;
     self.player.play();
   }
 
   pauseAudio(self) {
+    this.isPlayingAudio = false;
     self.player.pause();
   }
 
@@ -245,6 +293,7 @@ class AppCardModal extends HTMLElement {
     close.src = 'https://static.wixstatic.com/media/bb0dab_f1b78f85d6b44601acf5ff3fa9eff36f~mv2.png';
     closeButtonContainer.id = 'close-button-container';
     close.id = 'close-button';
+    close.setAttribute('aria-label', 'close modal button');
     closeButtonContainer.append(close);
     closeButtonContainer.addEventListener('click', closeModal);
     closeButtonContainer.addEventListener('touchstart', touchCloseModal);
@@ -268,7 +317,6 @@ class AppCardModal extends HTMLElement {
 
   createStyle() {
     const vp = this.getViewportAttribute();
-    console.log('vp: ', vp);
     const styleElement = document.createElement('style');
     styleElement.innerHTML = `
         app-card-modal {
@@ -316,9 +364,13 @@ class AppCardModal extends HTMLElement {
         #description, #card-modal-wrapper h2, #instructions, #page-number-topper {
           font-family: "Times New Roman", Times, serif;
         }
-        #description, #instructions {
+        #description {
           font-size: ${vp === 'mobile' ? '15px': '18px'};
           margin-bottom: 20px;
+        }
+        #instructions {
+          font-style: italic;
+          font-size: ${vp === 'mobile' ? '12px': '13px'};
         }
         #card-modal-wrapper h2 {
           font-size: 25px;
@@ -409,6 +461,7 @@ class AppCardModal extends HTMLElement {
     container.appendChild(this.createDescription(currentCard));
     container.appendChild(this.createInstructions());
     this.root.appendChild(this.createFixedContainer(currentCard));
+    this.root.setAttribute('role', 'dialog');
   }
 }
 customElements.define('app-card-modal', AppCardModal);
