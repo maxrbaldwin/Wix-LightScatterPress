@@ -30,12 +30,18 @@ class AppNavigation extends HTMLElement {
         bookmark: `<div id="bookmark"><sub>p.</sub>${self.getCardAttribute().pageNumber}</div>`,
       };
 
+      const altText = {
+        open: 'open directory modal. Use this to select a card from the deck of cards',
+        shuffle: 'shuffle cards. use this to shuffle the deck of cards',
+        bookmark: 'bookmark. use this to select your original card'
+      }
+
       button.innerHTML = icons[iconKey];
       button.classList.add('nav-item');
       button.id = id;
+      button.setAttribute('aria-label', altText[iconKey]);
 
       function buttonClick(e) {
-        console.log('click: ', e);
         self.dispatchEvent(new CustomEvent(clickEvent));
         e.preventDefault();
       }

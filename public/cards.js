@@ -25,12 +25,12 @@ const thismorning = 'https://static.wixstatic.com/mp3/bb0dab_b90a3b31b01c4104ac1
 const wishbone = 'https://static.wixstatic.com/mp3/bb0dab_0dbb2a85c268401ab6c705f15b75b8b7.wav';
 const august = 'https://static.wixstatic.com/mp3/bb0dab_1179c0c3742141a09af1fa3681d8283a.wav';
 const afterlife = 'https://static.wixstatic.com/mp3/bb0dab_89b9acc5120643c1a9d977e49ab64506.wav';
-const waterandstone = 'https://static.wixstatic.com/mp3/bb0dab_cfd25df0d40247509c767f2ede6a9fce.m4a';
-const inthebighouse = 'https://static.wixstatic.com/mp3/bb0dab_c8b8b5d1c4c04f03b9d7bbdac9bb7586.m4a';
-const verysmall = 'https://static.wixstatic.com/mp3/bb0dab_3439972add9344d58191b00ce43345b2.m4a';
-const practical = 'https://static.wixstatic.com/mp3/bb0dab_1b058fc1b7a944ff83f3ebfc91c096ca.m4a';
-const natureofobjects = 'https://static.wixstatic.com/mp3/bb0dab_887514e4621a4618a3bd37d650284e2f.m4a';
-const gaia = 'https://static.wixstatic.com/mp3/bb0dab_c8b8b5d1c4c04f03b9d7bbdac9bb7586.m4a';
+const waterandstone = 'https://static.wixstatic.com/mp3/bb0dab_909850c7ad644697a306b40f67b3f764.mp3';
+const inthebighouse = 'https://static.wixstatic.com/mp3/bb0dab_28f0011b26584548a1a6fbf9c9b47fd8.mp3';
+const verysmall = 'https://static.wixstatic.com/mp3/bb0dab_83810e5633f542aa9ca1070e5dd73004.mp3';
+const practical = 'https://static.wixstatic.com/mp3/bb0dab_34d3e825f00846fd83af8478819a67ba.mp3';
+const natureofobjects = 'https://static.wixstatic.com/mp3/bb0dab_87e2bcdb5d5749608b6ca17bef1787ff.mp3';
+const gaia = 'https://static.wixstatic.com/mp3/bb0dab_3a8357b076cf43db8c3b6a1f7a9d21d1.wav';
 
 
 export const data = [
@@ -44,6 +44,8 @@ export const data = [
     pageNumber: 16,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Isaac Bickmore',
+    altText: 'card image collage of three children in an old fashioned convertible, background landscape and night sky, a postage stamp in the corner',
+    audioAltText: 'ukulele, bass',
   },
   {
     id: '10002',
@@ -55,17 +57,21 @@ export const data = [
     pageNumber: 17,
     imageCredit: 'Kristy Sabey',
     musicCredit: 'Isaac Bickmore',
+    altText: 'card image of angel, with cemetery superimposed',
+    audioAltText: 'bass intro, synth strings and brass',
   },
   {
     id: '10003',
-    title: "Seven PM",
+    title: "Seven p.m.",
     desc: "Each scale is a prism;<br>yellow leaf, crimson vein, gold-edged cloud.",
     backColor: gold,
     front: 'https://static.wixstatic.com/media/bb0dab_69f853a6dbd747e08d046d201c719661~mv2.png',
     audio: sevenoclock,
     pageNumber: 35,
-    imageCredit: 'Kristy Sabey',
-    musicCredit: 'Isaac Bickmore',
+    imageCredit: 'Kris Parkinson',
+    musicCredit: 'Alex Duran',
+    altText: 'card image collage, fish over graffiti, with background cityscape',
+    audioAltText: 'synth keyboard and strings',
   },
   {
     id: '10004',
@@ -77,6 +83,8 @@ export const data = [
     pageNumber: 41,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Alex Duran',
+    altText: 'card collage of shooting target, bullet holed, and images of children',
+    audioAltText: 'synth percussion and guitar',
   },
   {
     id: '10005',
@@ -88,10 +96,12 @@ export const data = [
     pageNumber: 42,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Alex Duran',
+    altText: 'card collage of global map, girl with broom, and trash',
+    audioAltText: 'moody synth atmospherics',
   },
   {
     id: '10006',
-    title: 'Did you see us this morning, at the station at 6',
+    title: 'Did You See Us This Morning, at the Station at Six',
     desc: "I forgot to lick the icicles that cling to the peeling sill. What color is the underside of a pigeon’s silken wing?",
     backColor: paleYellow,
     front: 'https://static.wixstatic.com/media/bb0dab_af2d252da6b646a1bf91fa3f73e283e6~mv2.png',
@@ -99,10 +109,12 @@ export const data = [
     pageNumber: 43,
     imageCredit: 'Kristy Sabey',
     musicCredit: 'Alex Duran',
+    altText: 'card photo silhouette of waiting person, with station image superimposed within',
+    audioAltText: 'synth accordion',
   },
   {
     id: '10007',
-    title: 'In The Big House',
+    title: 'In the Big House',
     desc: "You’re like the glass,<br>the bars, the troughs of hay and clover,<br>the bulbs that dance through rusted mesh,<br>like sunlight through acacia, once.",
     backColor: green,
     front: 'https://static.wixstatic.com/media/bb0dab_396ea82db4bb459bb18a4b18f542fea5~mv2.png',
@@ -110,6 +122,8 @@ export const data = [
     pageNumber: 32,
     imageCredit: 'Kristy Sabey',
     musicCredit: 'Isaac Bickmore',
+    altText: 'card photo, two giraffes, one a juvenile, with chainlink fence superimposed',
+    audioAltText: 'pizzicato bass and brassy synth',
   },
   {
     id: '10008',
@@ -121,6 +135,8 @@ export const data = [
     pageNumber: 47,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Isaac Bickmore',
+    altText: 'card collage, pantheon of gods over a star map, with a seated woman below, praying',
+    audioAltText: 'walking bass and synth violin',
   },
   {
     id: '10009',
@@ -132,6 +148,8 @@ export const data = [
     pageNumber: 58,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Alex Duran',
+    altText: 'card collage of a letter, overlaid with a mother looking down at a young daughter ',
+    audioAltText: 'scintillating synth, driving bass and guiitar',
   },
   {
     id: '10010',
@@ -143,6 +161,8 @@ export const data = [
     pageNumber: 62,
     imageCredit: 'Kristy Sabey',
     musicCredit: 'Alex Duran',
+    altText: 'card photo of recycling bin with a water lily plant inside.',
+    audioAltText: 'driving mid tempo bass with guitar',
   },
   {
     id: '10011',
@@ -154,6 +174,8 @@ export const data = [
     pageNumber: 65,
     imageCredit: 'Kristy Sabey',
     musicCredit: 'Isaac Bickmore',
+    altText: 'card photo of two young people from the back, with picnic food superimposed as if in a backpack',
+    audioAltText: 'ukulele ostinato pattern with melody played against it',
   },
   {
     id: '10012',
@@ -165,6 +187,8 @@ export const data = [
     pageNumber: 79,
     imageCredit: 'Kristy Sabey',
     musicCredit: 'Alex Duran',
+    altText: 'card photo of coffee cup with lattes, a fountain pen writing on paper reflected',
+    audioAltText: 'quick tempo percussion with guitar pattern',
   },
   {
     id: '10013',
@@ -176,6 +200,8 @@ export const data = [
     pageNumber: 84,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Isaac Bickmore',
+    altText: 'card collage of two figures walking side by side, one a silhouette filled with stars, superimposed over a library check out form on brown paper.',
+    audioAltText: 'old time sounding piano',
   },
   {
     id: '10014',
@@ -187,10 +213,12 @@ export const data = [
     pageNumber: 86,
     imageCredit: 'Kris Parkinson',
     musicCredit: 'Isaac Bickmore',
+    altText: 'card collage of woman in astronaut gear, superimposed over a star map, a black and white photo of a man reading a paper in the corner.',
+    audioAltText: 'synth minor chords with ukulele melody',
   },
   {
     id: '10015',
-    title: 'Nature of Objects',
+    title: 'The Nature of Objects',
     desc: "Leaves flamed,<br>dried, dropped, the car died—the dog, too—",
     backColor: grayBrown,
     front: 'https://static.wixstatic.com/media/bb0dab_3dd171d451634572b89449377e660e29~mv2.png',
@@ -198,6 +226,8 @@ export const data = [
     pageNumber: 89,
     imageCredit: 'Jim Anderson',
     musicCredit: 'Isaac Bickmore',
+    altText: 'photo image of plant closeup, gilded with light.',
+    audioAltText: 'synth chords cascading as if from on high',
   },
 ];
 
