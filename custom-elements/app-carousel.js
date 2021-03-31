@@ -45,7 +45,9 @@ class AppCarousel extends HTMLElement {
     const loadingGifTimeout = 3000;
     const loadingGifContainer = document.createElement('div');
     loadingGifContainer.id = 'loading-gif-container';
+    this.loadingGif.setAttribute('tabIndex', '-1');
     loadingGifContainer.appendChild(this.loadingGif);
+    loadingGifContainer.setAttribute('tabIndex', '-1');
     this.root.appendChild(loadingGifContainer);
     const removeLoadingGifTimeout = setTimeout(() => {
       this.root.removeChild(loadingGifContainer);
@@ -66,6 +68,26 @@ class AppCarousel extends HTMLElement {
     this.stack = deck.data;
     this.firstCard = deck.data[0];
     this.mount();
+
+    document.addEventListener('keydown', keydownEvent => {
+      const firstCard = document.querySelector('#first');
+
+      if (keydownEvent.keyCode == '37') {
+        // left arrow
+        const animationTimer = setTimeout(() => {
+          this.next();
+          clearTimeout(animationTimer);
+        }, 500);
+        firstCard.classList.add('release-left');
+      } else if (keydownEvent.keyCode == '39') {
+        // right arrow
+        const animationTimer = setTimeout(() => {
+          this.next();
+          clearTimeout(animationTimer);
+        }, 500);
+        firstCard.classList.add('release-right');
+      }
+    });
   }
 
   shuffle() {
@@ -270,8 +292,6 @@ class AppCarousel extends HTMLElement {
     cardFront.style.backgroundImage = `url(${card.front})`;
 
     cardBack.style.backgroundImage = `url(${card.backColor})`;
-    cardBack.setAttribute('role', 'img');
-    cardBack.setAttribute('aria-label', card.title);
     cardBack.classList.add('card-back');
 
     cardContainer.style.top = `${CARD_TOP_DISTANCE * pos}px`;
@@ -363,8 +383,8 @@ class AppCarousel extends HTMLElement {
       
       cardContainer.addEventListener('mousemove', move);
     }
-  
-    cardContainer.id = 'first';
+
+    cardContainer.id = 'first'; 
     // desktop events
     cardContainer.addEventListener('mousedown', handleDrag, false);
     cardContainer.addEventListener('mouseup', end);
@@ -375,6 +395,8 @@ class AppCarousel extends HTMLElement {
     cardContainer.addEventListener('touchend', end);
 
     cardContainer.querySelector('.card-inner').classList.add('flip');
+    cardContainer.setAttribute('aria-label', `${card.altText} - click or tab this card for more`);
+    cardContainer.setAttribute('role', 'img');
 
     return cardContainer;
   }
